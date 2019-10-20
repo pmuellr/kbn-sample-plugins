@@ -1,4 +1,8 @@
+import { Logger } from './logger'
+
 import { alertType as alwaysFiringAlertType } from './alert_types/always_firing'
+import { alertType as essqlAlertType } from './alert_types/essql'
+import { alertType as fizzBuzzAlertType } from './alert_types/fizz_buzz'
 
 const PLUGIN_NAME = alert_type_examples.name
 
@@ -13,35 +17,13 @@ export default function alert_type_examples(kibana) {
 export let serverLog: any = console
 
 function init(server: any) {
-  serverLog = new ServerLog(server)
+  serverLog = new Logger(server, PLUGIN_NAME)
   registerAlertType(server, alwaysFiringAlertType)
+  registerAlertType(server, essqlAlertType)
+  registerAlertType(server, fizzBuzzAlertType)
 }
 
 function registerAlertType(server, alertType) {
   server.plugins.alerting.setup.registerType(alertType)
   serverLog.info(`registered alert type: ${alertType.id}`)
-}
-
-class ServerLog {
-  private server: any
-
-  constructor(server: any) {
-    this.server = server
-  }
-
-  debug(message: string) {
-    this.server.log(['debug', PLUGIN_NAME], message)
-  }
-
-  info(message: string) {
-    this.server.log(['info', PLUGIN_NAME], message)
-  }
-
-  warn(message: string) {
-    this.server.log(['warn', PLUGIN_NAME], message)
-  }
-
-  error(message: string) {
-    this.server.log(['error', PLUGIN_NAME], message)
-  }
 }
