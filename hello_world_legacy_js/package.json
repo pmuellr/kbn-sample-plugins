@@ -1,0 +1,7 @@
+{
+  "name": "hello_world_legacy_js",
+  "version": "1.2.3",
+  "kibana": {
+    "version": "kibana"
+  }
+}
