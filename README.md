@@ -7,6 +7,8 @@ directory, like so, assuming:
 - this repo's directory is a peer of the `kibana` directory
 
 ```
+ln -s ../../kbn-sample-plugins/hello_world_np_js .
 ln -s ../../kbn-sample-plugins/hello_world_legacy .
-ln -s ../../kbn-sample-plugins/hello_world_np .
+ln -s ../../kbn-sample-plugins/hello_world_legacy_js .
+ln -s ../../kbn-sample-plugins/alert_type_examples .
 ```

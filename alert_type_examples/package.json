@@ -1,0 +1,7 @@
+{
+  "name": "alert_type_examples",
+  "version": "1.2.3",
+  "kibana": {
+    "version": "kibana"
+  }
+}

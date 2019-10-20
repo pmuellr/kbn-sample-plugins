@@ -5,7 +5,7 @@ const PLUGIN_NAME = hello_world_legacy_js.name
 function hello_world_legacy_js(kibana) {
   return new kibana.Plugin({
     id: PLUGIN_NAME,
-    require: ['kibana', 'alerting'],
+    require: ['kibana'],
     init,
   });
 }
