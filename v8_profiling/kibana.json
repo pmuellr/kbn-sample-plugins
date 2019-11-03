@@ -1,0 +1,8 @@
+{
+  "id": "v8_profiling",
+  "version": "1.2.3",
+  "kibanaVersion": "kibana",
+  "requiredPlugins": [],
+  "server": true,
+  "ui": false
+}

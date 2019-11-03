@@ -11,6 +11,7 @@ ln -s ../../kbn-sample-plugins/hello_world_np_js .
 ln -s ../../kbn-sample-plugins/hello_world_legacy .
 ln -s ../../kbn-sample-plugins/hello_world_legacy_js .
 ln -s ../../kbn-sample-plugins/alert_type_examples .
+ln -s ../../kbn-sample-plugins/v8_profiling .
 ```
 
 Note that when symlinking, as above, absolute and relative imports
