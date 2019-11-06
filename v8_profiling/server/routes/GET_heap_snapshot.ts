@@ -31,10 +31,13 @@ export function registerRoute(plugin: Plugin, router: IRouter): void {
 
     plugin.logger.info(`finished heap snapshot`);
 
+    const fileName = new Date().toISOString().replace('T','@').substring(5, 19);
+
     return response.ok({
       body: snapshot,
       headers: {
-        'content-type': 'application/json'
+        'Content-Type': 'application/octet-stream',
+        'Content-Disposition': `attachment; filename="${fileName}.heapsnapshot"`
       }
     });
   });

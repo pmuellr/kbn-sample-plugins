@@ -64,10 +64,13 @@ export function registerRoute(plugin: Plugin, router: IRouter): void {
       return response.badRequest({ body: `unable to capture profile` });
     }
 
+    const fileName = new Date().toISOString().replace('T','@').substring(5, 19);
+
     return response.ok({
       body: profile,
       headers: {
-        'content-type': 'application/json'
+        'Content-Type': 'application/octet-stream',
+        'Content-Disposition': `attachment; filename="${fileName}.cpuprofile"`
       }
     });
   });

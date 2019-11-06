@@ -1,15 +1,12 @@
 # sample plugins for Kibana
 
-The easiest way to use this is to symlink them into your `kibana/plugins`
+The easiest way to use these is to symlink them into your `kibana/plugins`
 directory, like so, assuming:
 
 - you're currently in the `kibana/plugins` directory
 - this repo's directory is a peer of the `kibana` directory
 
 ```
-ln -s ../../kbn-sample-plugins/hello_world_np_js .
-ln -s ../../kbn-sample-plugins/hello_world_legacy .
-ln -s ../../kbn-sample-plugins/hello_world_legacy_js .
 ln -s ../../kbn-sample-plugins/alert_type_examples .
 ```
 
@@ -20,12 +17,36 @@ Note that sym-linking doesn't currently work if the plugin uses
 cp -R ../../kbn-sample-plugins/v8_profiling .
 ```
 
-Note that when symlinking, as above, absolute and relative imports
-including `..` may not work, but relative to the plugin directory 
-or lower will.
+
+# `v8_profiling` - V8 CPU Profiling and Heap Snapshots
+
+This plugin adds the following http entrypoints:
+
+## `/_dev/cpu_profile?duration=<number>`
+
+Captures a CPU profile for `duration` seconds.
+
+`duration` defaults to 5.
+
+## `/_dev/heap_snapshot`
+
+Captures a heap snapshot.
 
 
-# Alert Type Examples
+#### example invocations
+
+```
+curl -k "https://elastic:changeme@localhost:5601/_dev/cpu_profile?duration=10" > my.cpuprofile
+
+curl -k "https://elastic:changeme@localhost:5601/_dev/heap_snapshot" > my.heapsnapshot
+```
+
+Note the file extensions `.cpuprofile` and `.heapsnapshot` are required when
+loading the files into the V8's Chrome Dev Tools via the URL 
+[`chrome://inspect/`](chrome://inspect/).
+
+
+# `alert_type_examples` - Alert Type Examples
 
 This plugin adds the following alert types:
 
@@ -131,30 +152,3 @@ intervals.
 ```
 kbn-alert create example.fizz-buzz 1s '{}' "[ {group: fizz, id: '$ACTION_ID', params: {level: info, message: 'fizz {{context.count}}'}}  {group: buzz, id: '$ACTION_ID', params: {level: info, message: 'buzz {{context.count}}'}} {group: 'fizz-buzz', id: '$ACTION_ID', params: {level: info, message: 'fizz-buzz {{context.count}}'}} ]"
 ```
-
-# V8 Profiling
-
-This plugin adds the following http entrypoints:
-
-## `/_dev/cpu_profile?duration=<number>`
-
-Captures a CPU profile for `duration` seconds.
-
-`duration` defaults to 5.
-
-## `/_dev/heap_snapshot`
-
-Captures a heap snapshot.
-
-
-#### example invocations
-
-```
-curl -k "https://elastic:changeme@localhost:5601/_dev/cpu_profile?duration=10" > my.cpuprofile
-
-curl -k "https://elastic:changeme@localhost:5601/_dev/heap_snapshot" > my.heapsnapshot
-```
-
-Note the file extensions `.cpuprofile` and `.heapsnapshot` are required when
-loading the files into the V8's Chrome Dev Tools via the URL 
-[`chrome://inspect/`](chrome://inspect/).
