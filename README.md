@@ -136,15 +136,25 @@ kbn-alert create example.fizz-buzz 1s '{}' "[ {group: fizz, id: '$ACTION_ID', pa
 
 This plugin adds the following http entrypoints:
 
-## `_dev/cpu_profile?duration=<number>`
+## `/_dev/cpu_profile?duration=<number>`
 
 Captures a CPU profile for `duration` seconds.
 
 `duration` defaults to 5.
 
+## `/_dev/heap_snapshot`
 
-#### example invocation
+Captures a heap snapshot.
+
+
+#### example invocations
 
 ```
-curl -k "https://elastic:changeme@localhost:5601/_dev/cpu_profile?duration=10"
+curl -k "https://elastic:changeme@localhost:5601/_dev/cpu_profile?duration=10" > my.cpuprofile
+
+curl -k "https://elastic:changeme@localhost:5601/_dev/heap_snapshot" > my.heapsnapshot
 ```
+
+Note the file extensions `.cpuprofile` and `.heapsnapshot` are required when
+loading the files into the V8's Chrome Dev Tools via the URL 
+[`chrome://inspect/`](chrome://inspect/).

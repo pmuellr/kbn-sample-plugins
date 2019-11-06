@@ -13,6 +13,7 @@ export async function startProfiling (session: Session): Promise<() => any> {
   // returned function which stops the profile and resolves to the profile data
   return async function stopProfiling () {
     session.plugin.logger.debug('stopping profile')
-    return session.post('Profiler.stop')
+    const result: any = await session.post('Profiler.stop');
+    return result.profile;
   }
 }

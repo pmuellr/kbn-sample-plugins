@@ -47,6 +47,10 @@ export class Session {
     this.session = null
   }
 
+  on (event: string, handler: any) {
+    this.session.on(event, handler);
+  }
+
   async post (method: string, args?: any) {
     this.plugin.logger.debug(`posting method ${method} ${JSON.stringify(args)}`)
     if (this.session == null) {

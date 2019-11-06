@@ -24,21 +24,16 @@ export class Plugin {
 
   constructor(initializerContext: PluginInitializerContext) {
     this.logger = initializerContext.logger.get()
-    this.logger.info('initializing!')
   }
 
   async setup(core: CoreSetup) {
-    this.logger.info('setting up!');
-
     const router = core.http.createRouter();
     registerRoutes(this, router);
   }
 
   async start(core: CoreStart) {
-    this.logger.info('starting!');
   }
 
   async stop() {
-    this.logger.info('stopping!');
   }
 }

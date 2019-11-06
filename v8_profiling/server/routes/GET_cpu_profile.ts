@@ -18,7 +18,6 @@ const routeConfig = {
 };
 
 export function registerRoute(plugin: Plugin, router: IRouter): void {
-  plugin.logger.info(`registering route "${routeConfig.path}"`);
   router.get(routeConfig, async (
     context,
     request,
@@ -65,6 +64,11 @@ export function registerRoute(plugin: Plugin, router: IRouter): void {
       return response.badRequest({ body: `unable to capture profile` });
     }
 
-    return response.ok({ body: profile });
+    return response.ok({
+      body: profile,
+      headers: {
+        'content-type': 'application/json'
+      }
+    });
   });
 }
