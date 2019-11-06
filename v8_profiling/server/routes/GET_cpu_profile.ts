@@ -1,26 +1,70 @@
-import {
-  IRouter,
-  RequestHandlerContext,
-  KibanaRequest,
-  KibanaResponseFactory,
-} from '../../../../src/core/server';
+import { schema } from '@kbn/config-schema';
+
+import { IRouter } from '../../../../src/core/server';
 import { Plugin } from '../index';
+import { createSession, Session } from '../lib/session';
+import { startProfiling } from '../lib/profile';
+import { createDeferred } from '../lib/deferred';
+
+const routeValidation = {
+  query: schema.object({
+    duration: schema.number({ defaultValue: 5 }),
+  }),
+};
 
 const routeConfig = {
   path: '/_dev/cpu_profile',
-  validate: {
-  },
+  validate: routeValidation,
 };
 
-export function registerRoute(router: IRouter, plugin: Plugin): void {
+export function registerRoute(plugin: Plugin, router: IRouter): void {
   plugin.logger.info(`registering route "${routeConfig.path}"`);
   router.get(routeConfig, async (
-    context: RequestHandlerContext,
-    request: KibanaRequest,
-    response: KibanaResponseFactory,
+    context,
+    request,
+    response,
   ) => {
-    plugin.logger.info(`cpuProfile()`);
-    
-    return response.ok({ body: {} });
+    let session: Session;
+    try {
+      session = await createSession(plugin);
+    } catch (err) {
+      return response.badRequest({ body: `unable to create session: ${err.message}` });
+    }
+
+    plugin.logger.info(`starting cpuProfile`);
+    const deferred = createDeferred();
+    let stopProfiling: any;
+    try {
+      stopProfiling = await startProfiling(session);
+    } catch (err) {
+      return response.badRequest({ body: `unable to start profiling: ${err.message}` });
+    }
+
+    setTimeout(whenDone, 1000 * request.query.duration);
+
+    let profile;
+    async function whenDone() {
+      plugin.logger.info(`stopping cpuProfile`);
+      try {
+        profile = await stopProfiling();
+      } catch (err) {
+        plugin.logger.warn(`unable to capture profile: ${err.message}`);
+      }
+      deferred.resolve();
+    }
+
+    await deferred.promise;
+
+    try {
+      await session.destroy();
+    } catch (err) {
+      plugin.logger.warn(`unable to destroy session: ${err.message}`);
+    }
+
+    if (profile == null) {
+      return response.badRequest({ body: `unable to capture profile` });
+    }
+
+    return response.ok({ body: profile });
   });
 }

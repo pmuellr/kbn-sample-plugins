@@ -11,7 +11,13 @@ ln -s ../../kbn-sample-plugins/hello_world_np_js .
 ln -s ../../kbn-sample-plugins/hello_world_legacy .
 ln -s ../../kbn-sample-plugins/hello_world_legacy_js .
 ln -s ../../kbn-sample-plugins/alert_type_examples .
-ln -s ../../kbn-sample-plugins/v8_profiling .
+```
+
+Note that sym-linking doesn't currently work if the plugin uses
+`@kbn/config-schema`, and you'll need to copy the files instead, like so:
+
+```
+cp -R ../../kbn-sample-plugins/v8_profiling .
 ```
 
 Note that when symlinking, as above, absolute and relative imports
@@ -124,4 +130,21 @@ intervals.
 
 ```
 kbn-alert create example.fizz-buzz 1s '{}' "[ {group: fizz, id: '$ACTION_ID', params: {level: info, message: 'fizz {{context.count}}'}}  {group: buzz, id: '$ACTION_ID', params: {level: info, message: 'buzz {{context.count}}'}} {group: 'fizz-buzz', id: '$ACTION_ID', params: {level: info, message: 'fizz-buzz {{context.count}}'}} ]"
+```
+
+# V8 Profiling
+
+This plugin adds the following http entrypoints:
+
+## `_dev/cpu_profile?duration=<number>`
+
+Captures a CPU profile for `duration` seconds.
+
+`duration` defaults to 5.
+
+
+#### example invocation
+
+```
+curl -k "https://elastic:changeme@localhost:5601/_dev/cpu_profile?duration=10"
 ```

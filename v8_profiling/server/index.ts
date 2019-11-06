@@ -1,16 +1,18 @@
+import { schema } from '@kbn/config-schema';
+
 import {
   PluginInitializerContext,
   CoreSetup,
   CoreStart,
   Logger,
-  IRouter,
 } from '../../../src/core/server';
 
 import { registerRoutes } from './routes';
-import { Router } from '../../../src/core/server/http/router';
 
-export interface IContext {
-  logger: Logger;
+export const config = {
+  schema: schema.object({
+    enabled: schema.boolean({ defaultValue: true }),
+  })
 }
 
 export function plugin(initializerContext: PluginInitializerContext) {
@@ -29,7 +31,7 @@ export class Plugin {
     this.logger.info('setting up!');
 
     const router = core.http.createRouter();
-    registerRoutes(router, this);
+    registerRoutes(this, router);
   }
 
   async start(core: CoreStart) {
