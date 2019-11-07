@@ -126,7 +126,7 @@ in it's context:
 #### example invocation
 
 ```
-kbn-alert create example.always-firing 1s '{}' "[{group:default id:'${ACTION_ID}' params:{level: info, message: 'alert example.always-firing, date: {{context.date}}; count: {{context.count}}'}}]" 
+kbn-alert create example.always-firing "always firing example" 1s '{}' "[{group:default id:'${ACTION_ID}' params:{level: info, message: 'alert example.always-firing, date: {{context.date}}; count: {{context.count}}'}}]" 
 ```
 
 ## `example.essql`
@@ -139,7 +139,7 @@ documentation TBD
 #### example invocation
 
 ```
-kbn-alert create example.essql 30s '{query: "SELECT host.id as instanceId, \"@timestamp\" as timeStamp, system.cpu.system.pct as cpu FROM \"metricbeat-*\" WHERE system.cpu.system.pct > 1.5 AND timeStamp > NOW() - INTERVAL 30 SECONDS"}' "[{group: hits, id: '$ACTION_ID', params: {level: info, message: 'host {{instanceId}} at cpu {{cpu}} at {{timeStamp}}'}}]"
+kbn-alert create example.essql "essql example" 30s '{query: "SELECT host.id as instanceId, \"@timestamp\" as timeStamp, system.cpu.system.pct as cpu FROM \"metricbeat-*\" WHERE system.cpu.system.pct > 1.5 AND timeStamp > NOW() - INTERVAL 30 SECONDS"}' "[{group: hits, id: '$ACTION_ID', params: {level: info, message: 'host {{instanceId}} at cpu {{cpu}} at {{timeStamp}}'}}]"
 ```
 
 ## `example.fizz-buzz`
@@ -150,5 +150,5 @@ intervals.
 #### example invocation
 
 ```
-kbn-alert create example.fizz-buzz 1s '{}' "[ {group: fizz, id: '$ACTION_ID', params: {level: info, message: 'fizz {{context.count}}'}}  {group: buzz, id: '$ACTION_ID', params: {level: info, message: 'buzz {{context.count}}'}} {group: 'fizz-buzz', id: '$ACTION_ID', params: {level: info, message: 'fizz-buzz {{context.count}}'}} ]"
+kbn-alert create example.fizz-buzz "fizz-buzz example" 1s '{}' "[ {group: fizz, id: '$ACTION_ID', params: {level: info, message: 'fizz {{context.count}}'}}  {group: buzz, id: '$ACTION_ID', params: {level: info, message: 'buzz {{context.count}}'}} {group: 'fizz-buzz', id: '$ACTION_ID', params: {level: info, message: 'fizz-buzz {{context.count}}'}} ]"
 ```
