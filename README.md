@@ -45,6 +45,10 @@ Note the file extensions `.cpuprofile` and `.heapsnapshot` are required when
 loading the files into the V8's Chrome Dev Tools via the URL 
 [`chrome://inspect/`](chrome://inspect/).
 
+You can also use those URLs in the browser.  When used, they will download
+the relevant file to your "Downloads" directory with the relevant file
+extension and a time-stamp based name.
+
 
 # `alert_type_examples` - Alert Type Examples
 
