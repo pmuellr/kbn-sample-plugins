@@ -57,6 +57,7 @@ This plugin adds the following alert types:
 - `example.always-firing`
 - `example.essql`
 - `example.fizz-buzz`
+- `example.heartbeat`
 
 To play with the alerts in an existing kibana dev environment, you will need
 to do the following:
@@ -65,7 +66,7 @@ to do the following:
 
 - install [`jq`](https://stedolan.github.io/jq/)
 
-- add the following lines to `config kibana.dev.yml`
+- for Kibana 7.5 or lower, add the following lines to `config kibana.dev.yml`
 
   ```
   xpack.actions.enabled: true
@@ -130,7 +131,13 @@ in it's context:
 #### example invocation
 
 ```
-kbn-alert create example.always-firing "always firing example" 1s '{}' "[{group:default id:'${ACTION_ID}' params:{level: info, message: 'alert example.always-firing, date: {{context.date}}; count: {{context.count}}'}}]" 
+kbn-alert create example.always-firing "always firing example" 1s \
+  '{}' \
+  "[
+    {group:default id:'${ACTION_ID}' params:{level: info, message:
+      'alert example.always-firing, date: {{context.date}}; count: {{context.count}}'}
+    }
+  ]" 
 ```
 
 ## `example.essql`
@@ -143,7 +150,13 @@ documentation TBD
 #### example invocation
 
 ```
-kbn-alert create example.essql "essql example" 30s '{query: "SELECT host.id as instanceId, \"@timestamp\" as timeStamp, system.cpu.system.pct as cpu FROM \"metricbeat-*\" WHERE system.cpu.system.pct > 1.5 AND timeStamp > NOW() - INTERVAL 30 SECONDS"}' "[{group: hits, id: '$ACTION_ID', params: {level: info, message: 'host {{instanceId}} at cpu {{cpu}} at {{timeStamp}}'}}]"
+kbn-alert create example.essql "essql example" 30s \
+  '{query: "SELECT host.id as instanceId, \"@timestamp\" as timeStamp, system.cpu.system.pct as cpu FROM \"metricbeat-*\" WHERE system.cpu.system.pct > 1.5 AND timeStamp > NOW() - INTERVAL 30 SECONDS"}' \
+  "[
+    {group: hits, id: '$ACTION_ID', params: {level: info, message:
+      'host {{instanceId}} at cpu {{cpu}} at {{timeStamp}}'
+    }}
+  ]"
 ```
 
 ## `example.fizz-buzz`
@@ -154,5 +167,48 @@ intervals.
 #### example invocation
 
 ```
-kbn-alert create example.fizz-buzz "fizz-buzz example" 1s '{}' "[ {group: fizz, id: '$ACTION_ID', params: {level: info, message: 'fizz {{context.count}}'}}  {group: buzz, id: '$ACTION_ID', params: {level: info, message: 'buzz {{context.count}}'}} {group: 'fizz-buzz', id: '$ACTION_ID', params: {level: info, message: 'fizz-buzz {{context.count}}'}} ]"
+kbn-alert create example.fizz-buzz "fizz-buzz example" 1s \
+  '{}' \
+  "[ 
+    {group: fizz,        id: '$ACTION_ID', params: {level: info, message: 'fizz {{context.count}}'}}
+    {group: buzz,        id: '$ACTION_ID', params: {level: info, message: 'buzz {{context.count}}'}}
+    {group: 'fizz-buzz', id: '$ACTION_ID', params: {level: info, message: 'fizz-buzz {{context.count}}'}}
+   ]"
+```
+
+## `example.heartbeat`
+
+An alert that works off of uptime heartbeat documents.
+
+You can use [`es-hb-sim`](https://github.com/pmuellr/es-hb-sim) as a simulator to feed data to an elasticsearch index, in the shape this alert is expecting.
+
+This alert takes two parameters:
+
+- `index` - the name of the index to search for uptime heartbeat data
+- `window` - the number of minutes worth of most recent data to access
+
+There are four groups for this alert:
+
+- `up` - the monitor has transitioned from a non-up state to up
+- `down` - the monitor is down
+- `flapping` - the monitor has reported being up and down
+- `noData` - not enough data to make an analysis
+
+The context passed to the action contains:
+
+- `monitor` - the name of the monitor affected by this alert 
+
+#### example invocation
+
+(note window: 0.17 is 0.17 minutes == 10 seconds, useful to test with)
+
+```
+kbn-alert create example.heartbeat 'example heartbeat' 1s \
+  '{index: "monitor-sample" window: 0.17}' \
+  "[
+    {group:up       id:'$ACTION_ID' params:{level:info, message: 'up: {{context.monitor}}'}}
+    {group:down     id:'$ACTION_ID' params:{level:info, message: 'down: {{context.monitor}}'}}
+    {group:flapping id:'$ACTION_ID' params:{level:info, message: 'flapping: {{context.monitor}}'}}
+    {group:noData   id:'$ACTION_ID' params:{level:info, message: 'noData: {{context.monitor}}'}}
+   ]"
 ```
