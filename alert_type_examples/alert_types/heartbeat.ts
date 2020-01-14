@@ -7,6 +7,18 @@ export const alertType = {
   executor,
 }
 
+interface ActionContext {
+  startedAt: string,
+  alertId: string,
+  spaceId: string,
+  namespace: string,
+  name: string,
+  tags: string[],
+  createdBy: string,
+  updatedBy: string,
+  monitor: string,
+}
+
 interface MonitorRecord {
   timestamp: Date
   status: string
@@ -49,7 +61,8 @@ function validateWindow(window: any): number {
   return window
 }
 
-async function executor({ services, params, state: rawState }): Promise<State> {
+async function executor(executeParams): Promise<State> {
+  const { services, params, state: rawState } = executeParams;
   const state = getStateFromRaw(rawState)
   log(`state: ${JSON.stringify(state)}`)
 
@@ -102,6 +115,17 @@ async function executor({ services, params, state: rawState }): Promise<State> {
   const missingMonitors = new Set(Object.keys(state.monitors))
   log(`missingMonitors-1: ${Array.from(missingMonitors).join(', ')}`)
 
+  const actionContext = {
+    startedAt: executeParams.startedAt.toISOString(),
+    alertId: executeParams.alertId,
+    spaceId: executeParams.spaceId,
+    namespace: executeParams.namespace,
+    name: executeParams.name,
+    tags: executeParams.tags,
+    createdBy: executeParams.createdBy,
+    updatedBy: executeParams.updatedBy,
+  }
+
   for (const monitorName of monitorNames) {
     missingMonitors.delete(monitorName)
     const records = getMonitorRecords(objects, monitorName)
@@ -109,7 +133,13 @@ async function executor({ services, params, state: rawState }): Promise<State> {
       state.monitors[monitorName] = { status: 'noData' }
     }
 
-    processMonitorRecords(services, monitorName, records, state.monitors[monitorName])
+    processMonitorRecords(
+      services,
+      monitorName,
+      records,
+      state.monitors[monitorName],
+      { ...actionContext, monitor: monitorName },
+      )
   }
 
   log(`missingMonitors-2: ${Array.from(missingMonitors).join(', ')}`)
@@ -118,6 +148,7 @@ async function executor({ services, params, state: rawState }): Promise<State> {
     delete state.monitors[monitorName]
 
     services.alertInstanceFactory(monitorName).scheduleActions('noData', {
+      ...actionContext,
       monitor: monitorName
     })
   }
@@ -131,14 +162,11 @@ function processMonitorRecords(
   name: string,
   records: MonitorRecord[],
   monitorState: MonitorState,
+  context: ActionContext,
 ) {
   log(`monitorState: ${JSON.stringify(monitorState)}`)
   const lastTimeStamp = monitorState.timestamp
   monitorState.timestamp = new Date()
-
-  const context = {
-    monitor: name,
-  }
 
   // this shouldn't happen, but just in case
   if (records.length === 0) {

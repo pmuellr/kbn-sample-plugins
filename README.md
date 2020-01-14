@@ -196,6 +196,14 @@ There are four groups for this alert:
 
 The context passed to the action contains:
 
+- `startedAt` - ISO string of date the alert execution started
+- `alertId` - id of the alert
+- `spaceId` - spaceId of the alert (string)
+- `namespace` - namespace of the alert (string or undefined for 'default' spaceId)
+- `name` - name of the alert
+- `tags` - tags of the alert
+- `createdBy` - userid that created the alert
+- `updatedBy` - userid that last updated the alert
 - `monitor` - the name of the monitor affected by this alert 
 
 #### example invocation
