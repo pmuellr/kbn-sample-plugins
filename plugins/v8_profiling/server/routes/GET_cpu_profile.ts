@@ -1,6 +1,6 @@
-import { schema } from '@kbn/config-schema';
+import { schema  } from '../../../../../kibana/packages/kbn-config-schema';
 
-import { IRouter } from '../../../../src/core/server';
+import { IRouter } from '../../../../../kibana/src/core/server';
 import { Plugin } from '../index';
 import { createSession, Session } from '../lib/session';
 import { startProfiling } from '../lib/profile';

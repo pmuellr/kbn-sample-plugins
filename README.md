@@ -7,16 +7,10 @@ directory, like so, assuming:
 - this repo's directory is a peer of the `kibana` directory
 
 ```
-ln -s ../../kbn-sample-plugins/alert_type_examples .
+ln -s ../../kbn-sample-plugins/plugins/alert_type_examples .
+ln -s ../../kbn-sample-plugins/plugins/index_threshold_graph .
+ln -s ../../kbn-sample-plugins/plugins/v8_profiling .
 ```
-
-Note that sym-linking doesn't currently work if the plugin uses
-`@kbn/config-schema`, and you'll need to copy the files instead, like so:
-
-```
-cp -R ../../kbn-sample-plugins/v8_profiling .
-```
-
 
 # `v8_profiling` - V8 CPU Profiling and Heap Snapshots
 

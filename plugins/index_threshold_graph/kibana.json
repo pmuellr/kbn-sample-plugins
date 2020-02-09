@@ -1,8 +1,8 @@
 {
-  "id": "v8_profiling",
+  "id": "indexThresholdGraph",
   "version": "kibana",
   "kibanaVersion": "kibana",
-  "requiredPlugins": [],
+  "requiredPlugins": ["alertingIndexThreshold"],
   "server": true,
   "ui": false
 }

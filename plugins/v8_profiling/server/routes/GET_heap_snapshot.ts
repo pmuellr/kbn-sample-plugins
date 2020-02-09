@@ -1,4 +1,4 @@
-import { IRouter } from '../../../../src/core/server';
+import { IRouter } from '../../../../../kibana/src/core/server';
 import { Plugin } from '../index';
 import { createSession, Session } from '../lib/session';
 import { takeHeapSnapshot } from '../lib/heap_snapshot';

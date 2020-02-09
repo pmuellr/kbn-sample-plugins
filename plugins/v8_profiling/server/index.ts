@@ -1,11 +1,11 @@
-import { schema } from '@kbn/config-schema';
+import { schema  } from '../../../../kibana/packages/kbn-config-schema';
 
 import {
   PluginInitializerContext,
   CoreSetup,
   CoreStart,
   Logger,
-} from '../../../src/core/server';
+} from '../../../../kibana/src/core/server';
 
 import { registerRoutes } from './routes';
 
