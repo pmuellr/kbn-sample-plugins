@@ -44,6 +44,12 @@ the relevant file to your "Downloads" directory with the relevant file
 extension and a time-stamp based name.
 
 
+# `index_threshold_graph` - display index threshold alert data
+
+See the [`index_threshold_graph` README](plugins/index_threshold_graph/README.md)
+for more info on this plugin.
+
+
 # `alert_type_examples` - Alert Type Examples
 
 This plugin adds the following alert types:

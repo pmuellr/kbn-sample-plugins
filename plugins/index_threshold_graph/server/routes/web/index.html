@@ -1,0 +1,38 @@
+<!DOCTYPE html><html>
+<head>
+    <meta charset="utf-8">
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <style>
+      #vis {
+        position: fixed;
+        top:      0;
+        right:    0;
+        padding:  0.1em;
+        margin:   0.2em;
+        z-index:  -1;
+      }
+    </style>
+</head>
+
+<body>
+    <div id="vis"></div>
+
+    <p>indexName:<br/>       <span id=blort-var-indexNameView></span></p>
+    <p>timeField:<br/>       <span id=blort-var-timeFieldView></span></p>
+    <p>aggType:<br/>         <span id=blort-var-aggTypeView></span></p>
+    <p>aggField:<br/>        <span id=blort-var-aggFieldView></span></p>
+    <p>groupField:<br/>      <span id=blort-var-groupFieldView></span></p>
+    <p><span id=blort-var-intervalSeconds></span><br/> <span id=blort-var-intervalSecondsView></span></p>
+    <p><span id=blort-var-windowSeconds>  </span><br/> <span id=blort-var-windowSecondsView></span></p>
+    <p><span id=blort-var-intervalsBefore></span><br/> <span id=blort-var-intervalsBeforeView></span></p>
+    <p><span id=blort-var-intervalsAfter> </span><br/> <span id=blort-var-intervalsAfterView></span></p>
+    
+    <p><span id=blort-var-paramsDump></span></p>
+    <p><span id=blort-var-updateGraph></span></p>
+    <p><span id=blort-var-timer></span></p>
+
+    <script type="module" src="index.js"></script>
+</body>
+</html>
