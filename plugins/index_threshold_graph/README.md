@@ -6,9 +6,11 @@ First, start generating some data with
 [`es-apm-sys-sim`](https://github.com/pmuellr/es-apm-sys-sim):
 
 ```
-es-apm-sys-sim 1 apm-sys-sim host-a https://elastic:changeme@localhost:9200
+es-apm-sys-sim 1 apm-sys-sim https://elastic:changeme@localhost:9200
 ```
 
 Then visit the following URL to see the graph of the data:
 
 https://localhost:5601/_dev/index_threshold_graph/index.html
+
+![example session](threshold.gif)
