@@ -1,7 +1,13 @@
-export const alertType = {
+import { AlertType } from '../../../../kibana/x-pack/legacy/plugins/alerting/server';
+
+const actionGroups = ['skip', 'fizz', 'buzz', 'fizz-buzz'].map(actionGroup => {
+  return { id: actionGroup, name: actionGroup }
+});
+
+export const alertType: AlertType = {
   id: 'example.fizz-buzz',
   name: 'Alert that fires fizz, buzz, or fizz-buzz based on a counter',
-  actionGroups: ['skip', 'fizz', 'buzz', 'fizz-buzz'],
+  actionGroups,
   executor,
 };
 

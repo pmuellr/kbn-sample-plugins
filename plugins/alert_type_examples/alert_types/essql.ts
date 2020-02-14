@@ -1,7 +1,9 @@
-export const alertType = {
+import { AlertType } from '../../../../kibana/x-pack/legacy/plugins/alerting/server';
+
+export const alertType: AlertType = {
   id: 'example.essql',
   name: 'Alert that runs an essql, fires when results are non-empty',
-  actionGroups: ['hits'],
+  actionGroups: [{ id: 'hits', name: 'hits' }],
   executor,
 };
 
