@@ -55,7 +55,7 @@ module.addViewOf(function timeField(html) {
 
 module.addViewOf(function aggType(html) {
   return html`<select>
-    <option>avg
+    <option>average
     <option>min
     <option>max
     <option>sum
@@ -72,17 +72,17 @@ module.addViewOf(function groupField(html) {
 })
 
 module.addViewOf(function intervalSeconds(html) {
-  return html`<input type=range min=1 max=3600 step=1 value=1>`
+  return html`<input type=range min=1 max=60 step=1 value=1>`
 })
 
 module.addViewOf(function windowSeconds(html) {
-  return html`<input type=range min=1 max=3600 step=1 value=5>`
+  return html`<input type=range min=1 max=1000 step=1 value=5>`
 })
 
 module.addViewOf(function intervalsAfter(html) {
-  return html`<input type=range min=0 max=100 step=1 value=0>`
+  return html`<input type=range min=0 max=1000 step=1 value=0>`
 })
 
 module.addViewOf(function intervalsBefore(html) {
-  return html`<input type=range min=1 max=100 step=1 value=10>`
+  return html`<input type=range min=1 max=1000 step=1 value=10>`
 })

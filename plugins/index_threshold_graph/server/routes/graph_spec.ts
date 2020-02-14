@@ -44,6 +44,8 @@ export function createGraphSpecRoute(internalService: InternalService, router: I
     const vlSpec = {
       $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
       description: 'graph description',
+      width: 500,
+      height: 250,
       data: { values: vlData },
       mark: {
         type: 'line',
