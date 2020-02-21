@@ -1,8 +1,8 @@
 {
-  "id": "indexThresholdGraph",
+  "id": "alertTypeExamples",
   "version": "kibana",
   "kibanaVersion": "kibana",
-  "optionalPlugins": ["alertingBuiltins"],
+  "requiredPlugins": ["alerting"],
   "server": true,
   "ui": false
 }

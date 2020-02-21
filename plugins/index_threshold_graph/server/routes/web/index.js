@@ -1,37 +1,67 @@
 //@ts-ignore
-import { createModule  } from 'https://pmuellr.github.io/blort/blort-cdn.js'
+const thisUrl = import.meta.url
 
-const module = createModule()
+// The $body export defines the HTML structure of the note.
+// The references in the class properties of the div's and span's are
+// to variables, exported as functions below.
+export const $body = `
+  <p>
+    Use <a href="https://github.com/pmuellr/es-apm-sys-sim">es-apm-sys-sim</a>
+    to feed data to this graph:
+  </p>
+  <pre>
+      es-apm-sys-sim 1 4 apm-sys-sim https://elastic:changeme@localhost:9200
+  </pre>
+  <table>
+    <tr><td>indexName:</td>          <td class=indexNameView></td></tr>
+    <tr><td>timeField:</td>          <td class=timeFieldView></td></tr>
+    <tr><td>aggType:</td>            <td class=aggTypeView></td></tr>
+    <tr><td>aggField:</td>           <td class=aggFieldView></td></tr>
+    <tr><td>groupField:</td>         <td class=groupFieldView></td></tr>
+    <tr><td>interval: (seconds)</td> <td class=intervalSecondsView></td> <td><span class=intervalSeconds></span></td></tr>
+    <tr><td>window: (seconds)</td>   <td class=windowSecondsView></td>   <td><span class=windowSeconds></span></td></tr>
+    <tr><td>intervals:</td>          <td class=intervalsView></td>       <td><span class=intervals></span></td></tr>
+  </table>
 
-module.addMutable('timerFired', new Date())
+  <div id="vis"></div>
 
-module.addVariable(function *timer(timerFiredMutable, Promises) {
+  <hr>
+  <p><i><a href="${thisUrl}">view current source</a></i></p>
+  <p><i><a href="https://github.com/pmuellr/shnort">built with shnort</a></i></p>
+  <p><span class=timer></span></p>
+  <p><span class=updateGraph></span></p>
+`
+
+export const timerFiredMutableInit = new Date()
+
+export function *timer(timerFiredMutable, Promises) {
   while (true) {
     timerFiredMutable.value = new Date()
     yield Promises.delay(3000, timerFiredMutable.value)
   }  
-})
+}
 
-module.addVariable(async function updateGraph(vlSpec) {
+export async function updateGraph(vlSpec) {
   //@ts-ignore
   vegaEmbed('#vis', vlSpec)
-  return `last ran at ${new Date()}`
-})
+  return `updateGraph last ran at ${new Date()}`
+}
 
-module.addVariable(async function vlSpec(queryStringParams, timerFired) {
+export async function vlSpec(queryStringParams, timerFired) {
   const response = await fetch(`api?${queryStringParams}`)
   return await response.json()
-})
+}
 
-module.addVariable(function queryStringParams(queryParams) {
+export function queryStringParams(queryParams) {
   const terms = []
   for (const key of Object.keys(queryParams)) {
     terms.push(`${key}=${queryParams[key]}`)
   }
   return terms.join('&')
-})
+}
 
-module.addVariable(function queryParams(indexName, timeField, aggType, aggField, groupField, intervalSeconds, windowSeconds, intervals) {
+export function queryParams(indexName, timeField, aggType, aggField, groupField, intervalSeconds, windowSeconds, intervals) {
+  const dateRangeSeconds = intervals * intervalSeconds
   return {
     index: indexName,
     timeField,
@@ -40,20 +70,20 @@ module.addVariable(function queryParams(indexName, timeField, aggType, aggField,
     groupField,
     interval: `${intervalSeconds}s`,
     window: `${windowSeconds}s`,
-    dateStart: `now-${intervalSeconds}s`,
+    dateStart: `now-${dateRangeSeconds}s`,
     dateEnd: `now`,
   }
-})
+}
 
-module.addViewOf(function indexName(html) {
-  return html`<input value="apm-sys-sim" />`
-})
+export function indexNameView(html) {
+  return html`<input value="apm-sys-sim" size=40>`
+}
 
-module.addViewOf(function timeField(html) {
-  return html`<input value="@timestamp" />`
-})
+export function timeFieldView(html) {
+  return html`<input value="@timestamp" size=40>`
+}
 
-module.addViewOf(function aggType(html) {
+export function aggTypeView(html) {
   return html`<select>
     <option>average
     <option>min
@@ -61,24 +91,24 @@ module.addViewOf(function aggType(html) {
     <option>sum
     <option>count
   </select>`
-})
+}
 
-module.addViewOf(function aggField(html) {
-  return html`<input value="system.cpu.total.norm.pct" />`
-})
+export function aggFieldView(html) {
+  return html`<input value="system.cpu.total.norm.pct" size=40>`
+}
 
-module.addViewOf(function groupField(html) {
-  return html`<input value="host.name.keyword" />`
-})
+export function groupFieldView(html) {
+  return html`<input value="host.name.keyword"  size=40>`
+}
 
-module.addViewOf(function intervalSeconds(html) {
+export function intervalSecondsView(html) {
   return html`<input type=range min=1 max=60 step=1 value=1>`
-})
+}
 
-module.addViewOf(function windowSeconds(html) {
-  return html`<input type=range min=1 max=1000 step=1 value=5>`
-})
+export function windowSecondsView(html) {
+  return html`<input type=range min=1 max=120 step=1 value=5>`
+}
 
-module.addViewOf(function intervals(html) {
-  return html`<input type=range min=0 max=1000 step=1 value=0>`
-})
+export function intervalsView(html) {
+  return html`<input type=range min=0 max=200 step=1 value=1>`
+}

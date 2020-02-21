@@ -1,11 +1,25 @@
-<!DOCTYPE html><html>
-<head>
+<!DOCTYPE html>
+<html>
+  <head>
     <meta charset="utf-8">
+    <title>index threshold graph</title>
+    <link rel=icon href="https://www.elastic.co/apple-icon-180x180.png">
+    <link rel=stylesheet type="text/css" href="https://cdn.jsdelivr.net/npm/@observablehq/inspector@3/dist/inspector.css">
     <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  </head>
+  <body>
+    <div id=shell></div>
+    <script type=module>
+      import { loadNote } from 'https://cdn.jsdelivr.net/gh/pmuellr/shnort/shnort.js'
+      loadNote('./index.js', import.meta.url, document.body, '#shell')
+    </script>
     <style>
-      #vis {
+      body { font-size: 120%; }
+      input { font-size: 120%; }
+      select { font-size: 120%; }
+      #not-vis {
         position: fixed;
         top:      0;
         right:    0;
@@ -14,27 +28,5 @@
         z-index:  -1;
       }
     </style>
-</head>
-
-<body>
-    <div id="vis"></div>
-
-    <p>indexName:<br/>       <span id=blort-var-indexNameView></span></p>
-    <p>timeField:<br/>       <span id=blort-var-timeFieldView></span></p>
-    <p>aggType:<br/>         <span id=blort-var-aggTypeView></span></p>
-    <p>aggField:<br/>        <span id=blort-var-aggFieldView></span></p>
-    <p>groupField:<br/>      <span id=blort-var-groupFieldView></span></p>
-    <p><span id=blort-var-intervalSeconds></span><br/> <span id=blort-var-intervalSecondsView></span></p>
-    <p><span id=blort-var-windowSeconds>  </span><br/> <span id=blort-var-windowSecondsView></span></p>
-    <p><span id=blort-var-intervals></span><br/> <span id=blort-var-intervalsView></span></p>
-    <!--
-    <p><span id=blort-var-intervalsAfter> </span><br/> <span id=blort-var-intervalsAfterView></span></p>
-    -->
-    
-    <p><span id=blort-var-paramsDump></span></p>
-    <p><span id=blort-var-updateGraph></span></p>
-    <p><span id=blort-var-timer></span></p>
-
-    <script type="module" src="index.js"></script>
-</body>
+  </body>
 </html>

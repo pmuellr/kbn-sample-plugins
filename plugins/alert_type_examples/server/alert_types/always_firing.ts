@@ -1,4 +1,4 @@
-import { AlertType } from '../../../../kibana/x-pack/legacy/plugins/alerting/server';
+import { AlertType } from '../../../../../kibana/x-pack/plugins/alerting/server';
 
 export const alertType: AlertType = {
   id: 'example.always-firing',

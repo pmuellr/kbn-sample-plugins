@@ -6,15 +6,19 @@ import {
   KibanaResponseFactory,
 } from '../../../../../kibana/src/core/server';
 
-import { InternalService } from '../index';
-import { QueryDataParams, QueryDataParamsSchema } from '../../../../../kibana/x-pack/plugins/alerting_builtins/server/types';
+import { Service } from '../index';
+import {
+  TimeSeriesParams,
+  TimeSeriesParamsSchema,
+  TimeSeriesResult
+} from '../../../../../kibana/x-pack/plugins/alerting_builtins/server/alert_types/index_threshold/lib/time_series_types';
 
-export function createGraphSpecRoute(internalService: InternalService, router: IRouter, baseRoute: string) {
+export function createGraphSpecRoute(service: Service, router: IRouter, baseRoute: string) {
   router.get(
     {
       path: `${baseRoute}/api`,
       validate: {
-        query: QueryDataParamsSchema,
+        query: TimeSeriesParamsSchema,
       },
     },
     handler
@@ -22,16 +26,25 @@ export function createGraphSpecRoute(internalService: InternalService, router: I
 
   async function handler(
     ctx: RequestHandlerContext,
-    req: KibanaRequest<any, QueryDataParams, any, any>,
+    req: KibanaRequest<any, TimeSeriesParams, any, any>,
     res: KibanaResponseFactory
   ): Promise<IKibanaResponse<any>> {
-    internalService.logger.debug(`route query_data request: ${JSON.stringify(req.query, null, 4)}`);
-    const queryData = await internalService.aitService.runQuery({
-      logger: internalService.logger,
+    if (!service.alertingBuiltins) {
+      service.logger.warn('the alertingBuiltins plugin is not available')
+      return
+    }
+
+    const messagePrefix = 'alertingBuiltins.indexThreshold.timeSeriesQuery'
+    service.logger.debug(`${messagePrefix} request: ${JSON.stringify(req.query)}`);
+    const timeStart = Date.now()
+    const queryData = await service.alertingBuiltins.indexThreshold.timeSeriesQuery({
+      logger: service.logger,
       callCluster: ctx.core.elasticsearch.dataClient.callAsCurrentUser,
       queryParams: req.query,
     });
-    internalService.logger.debug(`route query_data response: ${JSON.stringify(queryData, null, 4)}`);
+    service.logger.debug(`${messagePrefix} response: ${JSON.stringify(queryData)}`);
+    const timeElapsed = Date.now() - timeStart
+    service.logger.debug(`${messagePrefix} elapsed millis: ${timeElapsed}`);
 
     const vlData = [];
     for (const group of Object.keys(queryData)) {
@@ -49,7 +62,8 @@ export function createGraphSpecRoute(internalService: InternalService, router: I
       data: { values: vlData },
       mark: {
         type: 'line',
-        interpolate: 'monotone'
+        "point": true,
+        // interpolate: 'monotone'
       },
       encoding: {
         x: { field: 'date', type: 'temporal' },

@@ -1,12 +1,18 @@
-// /Users/pmuellr/Projects/elastic/kbn-sample-plugins/index_threshold_graph/server/index.ts
-// /Users/pmuellr/Projects/elastic/kibana/plugins/index_threshold_graph/server/index.ts
-// ../../../x-pack/plugins/alerting_index_threshold/server
-
-// import { schema as brokenAtRuntime } from '@kbn/config-schema';
+export {
+  PluginSetupContract as AlertingSetup,
+  AlertType,
+  AlertExecutorOptions,
+} from '../../../../kibana/x-pack/plugins/alerting/server';
 
 import { schema  } from '../../../../kibana/packages/kbn-config-schema';
-import { IService as AITService } from '../../../../kibana/x-pack/plugins/alerting_builtins/server';
-export { IService as AITService } from '../../../../kibana/x-pack/plugins/alerting_builtins/server';
+
+console.log(__filename, '- fix the fake AlertingBuiltinsService when it gets merged to master')
+
+export interface AlertingBuiltinsService {
+  indexThreshold: {
+    timeSeriesQuery(parms: any): any;
+  }
+}
 
 import {
   PluginInitializerContext,
@@ -24,30 +30,31 @@ export const config = {
 }
 
 interface PluginDeps {
-  alertingIndexThreshold: AITService;
+  alertingBuiltins?: AlertingBuiltinsService;
 }
 
 export function plugin(initializerContext: PluginInitializerContext) {
   return new Plugin(initializerContext)
 }
 
-export interface InternalService {
-  logger: Logger;
-  aitService: AITService;
-}
+export type Service = Plugin
 
 export class Plugin {
   readonly logger: Logger;
-  aitService: AITService;
+  alertingBuiltins?: AlertingBuiltinsService;
 
   constructor(initializerContext: PluginInitializerContext) {
     this.logger = initializerContext.logger.get()
   }
 
   async setup(core: CoreSetup, plugins: PluginDeps): Promise<void> {
-    this.aitService = plugins.alertingIndexThreshold;
-    const router = core.http.createRouter();
-    registerRoutes(this, router);
+    this.alertingBuiltins = plugins.alertingBuiltins
+
+    if (!this.alertingBuiltins) {
+      this.logger.warn(`the alertingBuiltins plugin is not available, so this plugin will probably not work`)
+    }
+    const router = core.http.createRouter()
+    registerRoutes(this, router)
   }
 
   async start(core: CoreStart): Promise<void> {

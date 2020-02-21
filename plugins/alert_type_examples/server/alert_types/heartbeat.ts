@@ -1,4 +1,4 @@
-import { AlertType } from '../../../../kibana/x-pack/legacy/plugins/alerting/server';
+import { AlertType } from '../../../../../kibana/x-pack/plugins/alerting/server';
 
 import { sqlResultToObjects } from './lib/sql'
 
