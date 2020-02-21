@@ -31,7 +31,7 @@ module.addVariable(function queryStringParams(queryParams) {
   return terms.join('&')
 })
 
-module.addVariable(function queryParams(indexName, timeField, aggType, aggField, groupField, intervalSeconds, windowSeconds, intervalsBefore, intervalsAfter) {
+module.addVariable(function queryParams(indexName, timeField, aggType, aggField, groupField, intervalSeconds, windowSeconds, intervals) {
   return {
     index: indexName,
     timeField,
@@ -40,8 +40,8 @@ module.addVariable(function queryParams(indexName, timeField, aggType, aggField,
     groupField,
     interval: `${intervalSeconds}s`,
     window: `${windowSeconds}s`,
-    intervalsBefore,
-    intervalsAfter
+    dateStart: `now-${intervalSeconds}s`,
+    dateEnd: `now`,
   }
 })
 
@@ -79,10 +79,6 @@ module.addViewOf(function windowSeconds(html) {
   return html`<input type=range min=1 max=1000 step=1 value=5>`
 })
 
-module.addViewOf(function intervalsAfter(html) {
+module.addViewOf(function intervals(html) {
   return html`<input type=range min=0 max=1000 step=1 value=0>`
-})
-
-module.addViewOf(function intervalsBefore(html) {
-  return html`<input type=range min=1 max=1000 step=1 value=10>`
 })

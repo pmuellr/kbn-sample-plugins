@@ -2,7 +2,7 @@
   "id": "indexThresholdGraph",
   "version": "kibana",
   "kibanaVersion": "kibana",
-  "requiredPlugins": ["alertingIndexThreshold"],
+  "requiredPlugins": ["alertingBuiltins"],
   "server": true,
   "ui": false
 }

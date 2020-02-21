@@ -1,16 +1,13 @@
 # sample plugins for Kibana
 
 The easiest way to use these is to symlink them into your `kibana/plugins`
-directory, like so, assuming:
+directory.  If the following is true:
 
 - you're currently in the `kibana/plugins` directory
 - this repo's directory is a peer of the `kibana` directory
 
-```
-ln -s ../../kbn-sample-plugins/plugins/alert_type_examples .
-ln -s ../../kbn-sample-plugins/plugins/index_threshold_graph .
-ln -s ../../kbn-sample-plugins/plugins/v8_profiling .
-```
+then you can use the `ln-plugins.sh` command to link the plugins
+locally into the kibana plugins directory.
 
 # `v8_profiling` - V8 CPU Profiling and Heap Snapshots
 

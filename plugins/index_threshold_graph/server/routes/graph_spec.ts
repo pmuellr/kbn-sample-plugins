@@ -7,7 +7,7 @@ import {
 } from '../../../../../kibana/src/core/server';
 
 import { InternalService } from '../index';
-import { QueryDataParams, QueryDataParamsSchema } from '../../../../../kibana/x-pack/plugins/alerting_index_threshold/server/types';
+import { QueryDataParams, QueryDataParamsSchema } from '../../../../../kibana/x-pack/plugins/alerting_builtins/server/types';
 
 export function createGraphSpecRoute(internalService: InternalService, router: IRouter, baseRoute: string) {
   router.get(

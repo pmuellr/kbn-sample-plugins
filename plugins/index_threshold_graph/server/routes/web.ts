@@ -7,7 +7,6 @@ import {
 } from '../../../../../kibana/src/core/server';
 
 import { InternalService } from '../index';
-import { QueryDataParams, QueryDataParamsSchema } from '../../../../../kibana/x-pack/plugins/alerting_index_threshold/server/types';
 
 import * as fs from 'fs';
 import * as path from 'path';

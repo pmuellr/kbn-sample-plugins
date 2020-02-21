@@ -5,8 +5,8 @@
 // import { schema as brokenAtRuntime } from '@kbn/config-schema';
 
 import { schema  } from '../../../../kibana/packages/kbn-config-schema';
-import { IService as AITService } from '../../../../kibana/x-pack/plugins/alerting_index_threshold/server';
-export { IService as AITService } from '../../../../kibana/x-pack/plugins/alerting_index_threshold/server';
+import { IService as AITService } from '../../../../kibana/x-pack/plugins/alerting_builtins/server';
+export { IService as AITService } from '../../../../kibana/x-pack/plugins/alerting_builtins/server';
 
 import {
   PluginInitializerContext,

@@ -32,7 +32,7 @@ async function executor({ services, params, state }) {
   if (group !== 'skip') {
     const context = {
       date: new Date().toISOString(),
-      count: state.count,
+      count: `"${state.count}"`,
     };
     services.alertInstanceFactory('').scheduleActions(group, context);
   }
