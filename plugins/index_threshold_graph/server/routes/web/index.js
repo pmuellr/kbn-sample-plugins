@@ -26,8 +26,8 @@ export const $body = `
   <div id="vis"></div>
 
   <hr>
-  <p><i><a href="${thisUrl}">view current source</a></i></p>
-  <p><i><a href="https://github.com/pmuellr/shnort">built with shnort</a></i></p>
+  <p><i><a target=_blank href="${thisUrl}">view source</a></i></p>
+  <p><i><a target=_blank href="https://github.com/pmuellr/shnort">built with shnort</a></i></p>
   <p><span class=timer></span></p>
   <p><span class=updateGraph></span></p>
 `
@@ -110,5 +110,5 @@ export function windowSecondsView(html) {
 }
 
 export function intervalsView(html) {
-  return html`<input type=range min=0 max=200 step=1 value=1>`
+  return html`<input type=range min=0 max=1000 step=2 value=40>`
 }
