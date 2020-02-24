@@ -11,10 +11,6 @@
   </head>
   <body>
     <div id=shell></div>
-    <script type=module>
-      import { loadNote } from 'https://cdn.jsdelivr.net/gh/pmuellr/shnort/shnort.js'
-      loadNote('./index.js', import.meta.url, document.body, '#shell')
-    </script>
     <style>
       body { font-size: 120%; }
       input { font-size: 120%; }
@@ -28,5 +24,12 @@
         z-index:  -1;
       }
     </style>
+    <script type=module>
+      import App from './index.svelte';
+
+      const app = new App({
+	      target: document.body,
+	    })
+    </script>
   </body>
 </html>
