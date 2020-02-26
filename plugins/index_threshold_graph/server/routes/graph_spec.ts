@@ -8,8 +8,8 @@ import {
 
 import { Service } from '../index';
 import {
-  TimeSeriesParams,
-  TimeSeriesParamsSchema,
+  TimeSeriesQuery,
+  TimeSeriesQuerySchema,
   TimeSeriesResult
 } from '../../../../../kibana/x-pack/plugins/alerting_builtins/server/alert_types/index_threshold/lib/time_series_types';
 
@@ -18,7 +18,7 @@ export function createGraphSpecRoute(service: Service, router: IRouter, baseRout
     {
       path: `${baseRoute}/api`,
       validate: {
-        query: TimeSeriesParamsSchema,
+        query: TimeSeriesQuerySchema,
       },
     },
     handler
@@ -26,7 +26,7 @@ export function createGraphSpecRoute(service: Service, router: IRouter, baseRout
 
   async function handler(
     ctx: RequestHandlerContext,
-    req: KibanaRequest<any, TimeSeriesParams, any, any>,
+    req: KibanaRequest<any, TimeSeriesQuery, any, any>,
     res: KibanaResponseFactory
   ): Promise<IKibanaResponse<any>> {
     if (!service.alertingBuiltins) {
@@ -40,16 +40,17 @@ export function createGraphSpecRoute(service: Service, router: IRouter, baseRout
     const queryData = await service.alertingBuiltins.indexThreshold.timeSeriesQuery({
       logger: service.logger,
       callCluster: ctx.core.elasticsearch.dataClient.callAsCurrentUser,
-      queryParams: req.query,
+      query: req.query,
     });
     service.logger.debug(`${messagePrefix} response: ${JSON.stringify(queryData)}`);
     const timeElapsed = Date.now() - timeStart
     service.logger.debug(`${messagePrefix} elapsed millis: ${timeElapsed}`);
 
     const vlData = [];
-    for (const group of Object.keys(queryData)) {
-      for (const entry of queryData[group]) {
-        vlData.push({ group, date: entry[0], value: entry[1] });
+    for (const groupData of queryData.results) {
+      const group = groupData.group
+      for (const metric of groupData.metrics) {
+        vlData.push({ group, date: metric[0], value: metric[1] });
       }
     }
 
@@ -62,8 +63,8 @@ export function createGraphSpecRoute(service: Service, router: IRouter, baseRout
       data: { values: vlData },
       mark: {
         type: 'line',
-        "point": true,
-        // interpolate: 'monotone'
+        point: true,
+        interpolate: 'monotone'
       },
       encoding: {
         x: { field: 'date', type: 'temporal' },

@@ -60,8 +60,10 @@ export function queryStringParams(queryParams) {
   return terms.join('&')
 }
 
-export function queryParams(indexName, timeField, aggType, aggField, groupField, intervalSeconds, windowSeconds, intervals) {
+export function queryParams(timerFired, indexName, timeField, aggType, aggField, groupField, intervalSeconds, windowSeconds, intervals) {
   const dateRangeSeconds = intervals * intervalSeconds
+  const dateEnd = new Date().toISOString();
+  const dateStart = new Date(Date.now() - dateRangeSeconds * 1000).toISOString()
   return {
     index: indexName,
     timeField,
@@ -70,8 +72,8 @@ export function queryParams(indexName, timeField, aggType, aggField, groupField,
     groupField,
     interval: `${intervalSeconds}s`,
     window: `${windowSeconds}s`,
-    dateStart: `now-${dateRangeSeconds}s`,
-    dateEnd: `now`,
+    dateStart,
+    dateEnd,
   }
 }
 
@@ -110,5 +112,5 @@ export function windowSecondsView(html) {
 }
 
 export function intervalsView(html) {
-  return html`<input type=range min=0 max=1000 step=2 value=40>`
+  return html`<input type=range min=0 max=198 step=2 value=40>`
 }
