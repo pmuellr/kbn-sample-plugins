@@ -1,0 +1,7 @@
+{
+  "id": "renderSchema",
+  "version": "kibana",
+  "kibanaVersion": "kibana",
+  "server": true,
+  "ui": true
+}
