@@ -2,7 +2,7 @@
 const thisUrl = import.meta.url
 
 // The $body export defines the HTML structure of the note.
-// The references in the class properties of the div's and span's are
+// The references in the class properties of the elements are
 // to variables, exported as functions below.
 export const $body = `
   <p>
@@ -13,14 +13,14 @@ export const $body = `
       es-apm-sys-sim 1 4 apm-sys-sim https://elastic:changeme@localhost:9200
   </pre>
   <table>
-    <tr><td>indexName:</td>          <td class=indexNameView></td></tr>
-    <tr><td>timeField:</td>          <td class=timeFieldView></td></tr>
-    <tr><td>aggType:</td>            <td class=aggTypeView></td></tr>
-    <tr><td>aggField:</td>           <td class=aggFieldView></td></tr>
-    <tr><td>groupField:</td>         <td class=groupFieldView></td></tr>
-    <tr><td>interval: (seconds)</td> <td class=intervalSecondsView></td> <td><span class=intervalSeconds></span></td></tr>
-    <tr><td>window: (seconds)</td>   <td class=windowSecondsView></td>   <td><span class=windowSeconds></span></td></tr>
-    <tr><td>intervals:</td>          <td class=intervalsView></td>       <td><span class=intervals></span></td></tr>
+    <tr><td>indexName:</td>                          <td class=indexNameView></td></tr>
+    <tr><td>timeField:</td>                          <td class=timeFieldView></td></tr>
+    <tr><td>aggType:</td>                            <td class=aggTypeView></td></tr>
+    <tr><td>aggField:</td>                           <td class=aggFieldView></td></tr>
+    <tr><td>termField:</td>                          <td class=termFieldView></td></tr>
+    <tr><td><span class=intervalSeconds></span></td> <td class=intervalSecondsView></td></tr>
+    <tr><td><span class=timeWindowSize></span></td>  <td class=timeWindowSizeView></td></tr>
+    <tr><td><span class=intervals></span></td>       <td class=intervalsView></td></tr>
   </table>
 
   <div id="vis"></div>
@@ -60,7 +60,7 @@ export function queryStringParams(queryParams) {
   return terms.join('&')
 }
 
-export function queryParams(timerFired, indexName, timeField, aggType, aggField, groupField, intervalSeconds, windowSeconds, intervals) {
+export function queryParams(timerFired, indexName, timeField, aggType, aggField, termField, intervalSeconds, timeWindowSize, intervals) {
   const dateRangeSeconds = intervals * intervalSeconds
   const dateEnd = new Date().toISOString();
   const dateStart = new Date(Date.now() - dateRangeSeconds * 1000).toISOString()
@@ -69,9 +69,12 @@ export function queryParams(timerFired, indexName, timeField, aggType, aggField,
     timeField,
     aggType,
     aggField,
-    groupField,
+    groupBy: 'top',
+    termField,
+    termSize: 1000,
     interval: `${intervalSeconds}s`,
-    window: `${windowSeconds}s`,
+    timeWindowSize,
+    timeWindowUnit: 's',
     dateStart,
     dateEnd,
   }
@@ -87,7 +90,7 @@ export function timeFieldView(html) {
 
 export function aggTypeView(html) {
   return html`<select>
-    <option>average
+    <option>avg
     <option>min
     <option>max
     <option>sum
@@ -99,7 +102,7 @@ export function aggFieldView(html) {
   return html`<input value="system.cpu.total.norm.pct" size=40>`
 }
 
-export function groupFieldView(html) {
+export function termFieldView(html) {
   return html`<input value="host.name.keyword"  size=40>`
 }
 
@@ -107,7 +110,7 @@ export function intervalSecondsView(html) {
   return html`<input type=range min=1 max=60 step=1 value=1>`
 }
 
-export function windowSecondsView(html) {
+export function timeWindowSizeView(html) {
   return html`<input type=range min=1 max=120 step=1 value=5>`
 }
 

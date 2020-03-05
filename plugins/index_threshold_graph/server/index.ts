@@ -5,14 +5,7 @@ export {
 } from '../../../../kibana/x-pack/plugins/alerting/server';
 
 import { schema  } from '../../../../kibana/packages/kbn-config-schema';
-
-console.log(__filename, '- fix the fake AlertingBuiltinsService when it gets merged to master')
-
-export interface AlertingBuiltinsService {
-  indexThreshold: {
-    timeSeriesQuery(parms: any): any;
-  }
-}
+import { IService as AlertingBuiltinsService } from '../../../../kibana/x-pack/plugins/alerting_builtins/server';
 
 import {
   PluginInitializerContext,
