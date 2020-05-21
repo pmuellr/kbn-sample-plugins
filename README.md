@@ -1,13 +1,23 @@
 # sample plugins for Kibana
 
 The easiest way to use these is to symlink them into your `kibana/plugins`
-directory.  If the following is true:
+directory.  Run the `ln-plugins.sh` command to link the plugins locally into
+a peer kibana clone directory.  Ie, this git repo clone should be in the same
+directory as the kibana repo clone you want it installed in.
 
-- you're currently in the `kibana/plugins` directory
-- this repo's directory is a peer of the `kibana` directory
+# `el_constipation` - detect event loop blockages
 
-then you can use the `ln-plugins.sh` command to link the plugins
-locally into the kibana plugins directory.
+This plugin will log to the console when the event log has been blocked for
+a configured threshold.  
+
+One http entrypoint is provided to force the event loop to be blocked for a
+specified amount of time.  The following curl invocation will block the
+event loop for 5 seconds (5000 milliseconds).
+
+    export KBN_URLBASE=https://elastic:changeme@localhost:5601
+    curl -k -X POST -H "kbn-xsrf: X" $KBN_URLBASE/_dev/eat_cpu?millis=5000
+
+
 
 # `v8_profiling` - V8 CPU Profiling and Heap Snapshots
 

@@ -1,0 +1,8 @@
+{
+  "id": "elConstipation",
+  "version": "kibana",
+  "kibanaVersion": "kibana",
+  "requiredPlugins": [],
+  "server": true,
+  "ui": false
+}
