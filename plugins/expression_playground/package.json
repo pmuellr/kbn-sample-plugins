@@ -1,0 +1,7 @@
+{
+  "name": "expression_playground",
+  "version": "1.0.0",
+  "dependencies": {
+    "abort-controller": "^3.0.0"
+  }
+}

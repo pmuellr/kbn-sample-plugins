@@ -1,0 +1,8 @@
+{
+  "id": "expressionPlayground",
+  "version": "kibana",
+  "kibanaVersion": "kibana",
+  "requiredPlugins": ["expressions"],
+  "server": true,
+  "ui": false
+}
