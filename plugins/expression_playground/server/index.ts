@@ -1,4 +1,10 @@
+// expressions references window.AbortController somewhere, this fixes that issue
 import "abort-controller/polyfill"
+
+// expressions references window somewhere, maybe this fixes that issue
+// @ ts-expect-error
+// if (typeof window === undefined) global.window = {}
+
 import { first } from '../../../../kibana/node_modules/rxjs/operators';
 
 import {

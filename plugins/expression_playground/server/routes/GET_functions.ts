@@ -22,13 +22,12 @@ export function registerRoute(params: RouteParams): void {
   ) => {
     const functions = plugin.getExpressionService().getFunctions()
 
+    const body = JSON.stringify({ ...functions }, null, 4)
     return response.ok({
       headers: {
         'content-type': 'application/json',
       },
-      body: {
-        ...functions,
-      },
+      body,
     })
   })
 }

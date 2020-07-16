@@ -8,22 +8,18 @@ import {
 import { RouteParams } from '.'
 
 type BodyType = TypeOf<typeof BodySchema>
-const BodySchema = schema.object({
-  expression: schema.string(),
-  input: schema.any({ defaultValue: {}}),
-  context: schema.recordOf(schema.string(), schema.any(), { defaultValue: {}}),
-})
+const BodySchema = schema.string()
 
 const routeValidation = {
   body: BodySchema,
 }
 
 const routeConfig: RouteConfig<unknown, unknown, BodyType, any> = {
-  path: '/_dev/epg/run',
+  path: '/_dev/epg/runs',
   validate: routeValidation,
 }
 
-// http body: { "expression": "slog", "input": "hello, world" }
+// http body: "input 'hello' | slog"
 
 export function registerRoute(params: RouteParams): void {
   const { plugin, router, expService } = params
@@ -37,17 +33,17 @@ export function registerRoute(params: RouteParams): void {
   ) => {
     const reqExpService = plugin.getExpressionService()
 
-    const {expression, input, context } = request.body
+    const expression = request.body
 
     // ast: string | ExpressionAstExpression, input: unknown, context?: Record<string, unknown>
     let runResult: unknown
     try {
-      runResult = { result: await reqExpService.run(expression, input, context) }
+      runResult = { result: await reqExpService.run(expression, null, {}) }
     } catch (err) {
       runResult = { error: `error running expression: ${err}`}
     }
   
-    plugin.logger.debug(`expression: [${expression}]; input: ${JSON.stringify(input)}; context: ${JSON.stringify(context)} => ${JSON.stringify(runResult)}`)
+    plugin.logger.debug(`expression: [${expression}] => ${JSON.stringify(runResult)}`)
 
     return response.ok({
       headers: {

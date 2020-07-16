@@ -5,30 +5,28 @@ interface Arguments {
   value: string | number | boolean;
 }
 
-type ExpressionDef = ExpressionFunctionDefinition<'slog', unknown, Arguments, unknown>
+type ExpressionDef = ExpressionFunctionDefinition<'input', unknown, Arguments, unknown>
 
 const def: Omit<ExpressionDef, 'fn'> = {
-  name: 'slog',
-  help: 'Logs the input to the kibana logger',
+  name: 'input',
+  help: 'Output the argument as input to the next stage',
   args: {
     value: {
       aliases: ['_'],
       types: ['string', 'number', 'boolean'],
-      help: 'value to log'
+      help: 'value to output'
     },
-  },
+  }
 };
 
 export function getFunctionDefinition(params: FunctionParams): ExpressionDef {
   return { ...def, fn }
 
   function fn(input: unknown, args: any) {
-    if (args.value != null) input = args.value
-    
-    const inputString = (typeof input !== 'object') ? `${input}` : JSON.stringify(input)
+    const value = args.value
+    const valueString = (typeof value !== 'object') ? `${value}` : JSON.stringify(value)
 
-    params.plugin.logger.info(`slog: ${inputString}`)
-    return input
+    params.plugin.logger.debug(`fn input: ${valueString}`)
+    return value
   }
 }
-
