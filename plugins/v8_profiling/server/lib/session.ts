@@ -3,7 +3,7 @@
 import { Plugin } from '../index';
 import { createDeferred } from './deferred';
 
-let inspector:any = null;
+let inspector: any = null;
 try {
   inspector = require('inspector')
 } catch (err) {

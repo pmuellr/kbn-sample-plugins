@@ -1,4 +1,4 @@
-import { AlertType } from '../../../../../kibana/x-pack/plugins/alerting/server';
+import { AlertType } from '../../../../../kibana/x-pack/plugins/alerts/server';
 
 const actionGroups = ['skip', 'fizz', 'buzz', 'fizz-buzz'].map(actionGroup => {
   return { id: actionGroup, name: actionGroup }
@@ -6,12 +6,15 @@ const actionGroups = ['skip', 'fizz', 'buzz', 'fizz-buzz'].map(actionGroup => {
 
 export const alertType: AlertType = {
   id: 'example.fizz-buzz',
-  name: 'Alert that fires fizz, buzz, or fizz-buzz based on a counter',
+  name: 'Example alert that fires fizz, buzz, or fizz-buzz based on a counter',
   actionGroups,
   executor,
+  defaultActionGroupId: 'default',
+  producer: 'builtInAlerts'
 };
 
 async function executor({ services, params, state }) {
+  if (state == null) throw Error('wops')
   if (state == null) state = {};
   if (state.count == null) state.count = 0;
 

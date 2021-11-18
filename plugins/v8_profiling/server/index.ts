@@ -1,4 +1,4 @@
-import { schema  } from '../../../../kibana/packages/kbn-config-schema';
+import { schema } from '@kbn/config-schema';
 
 import {
   PluginInitializerContext,
@@ -26,12 +26,12 @@ export class Plugin {
     this.logger = initializerContext.logger.get()
   }
 
-  async setup(core: CoreSetup) {
+  setup(core: CoreSetup) {
     const router = core.http.createRouter();
     registerRoutes(this, router);
   }
 
-  async start(core: CoreStart) {
+  start(core: CoreStart) {
   }
 
   async stop() {

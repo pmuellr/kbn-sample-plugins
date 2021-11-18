@@ -1,5 +1,8 @@
 # sample plugins for Kibana
 
+**Warning: these are all in various states of disrepair.  But
+usually easy to get working again in Kibana with tweaks.**
+
 The easiest way to use these is to symlink them into your `kibana/plugins`
 directory.  Run the `ln-plugins.sh` command to link the plugins locally into
 a peer kibana clone directory.  Ie, this git repo clone should be in the same

@@ -1,10 +1,12 @@
-import { AlertType } from '../../../../../kibana/x-pack/plugins/alerting/server';
+import { AlertType } from '../../../../../kibana/x-pack/plugins/alerts/server';
 
 export const alertType: AlertType = {
   id: 'example.essql',
-  name: 'Alert that runs an essql, fires when results are non-empty',
+  name: 'Example alert that runs an essql, fires when results are non-empty',
   actionGroups: [{ id: 'hits', name: 'hits' }],
   executor,
+  defaultActionGroupId: 'default',
+  producer: 'builtInAlerts'
 };
 
 async function executor({ services, params }) {

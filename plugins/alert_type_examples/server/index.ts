@@ -1,7 +1,7 @@
 
 import { schema  } from '../../../../kibana/packages/kbn-config-schema';
-import { PluginSetupContract as AlertingSetup } from '../../../../kibana/x-pack/plugins/alerting/server';
-export { PluginSetupContract as AlertingSetup } from '../../../../kibana/x-pack/plugins/alerting/server';
+import { PluginSetupContract as AlertingSetup } from '../../../../kibana/x-pack/plugins/alerts/server';
+export { PluginSetupContract as AlertingSetup } from '../../../../kibana/x-pack/plugins/alerts/server';
 
 import { alertType as alwaysFiringAlertType } from './alert_types/always_firing'
 import { alertType as essqlAlertType } from './alert_types/essql'

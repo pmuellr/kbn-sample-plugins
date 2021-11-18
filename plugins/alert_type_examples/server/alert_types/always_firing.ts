@@ -1,10 +1,12 @@
-import { AlertType } from '../../../../../kibana/x-pack/plugins/alerting/server';
+import { AlertType } from '../../../../../kibana/x-pack/plugins/alerts/server';
 
 export const alertType: AlertType = {
   id: 'example.always-firing',
-  name: 'Alert that always fires actions when run',
+  name: 'Example alert that always fires actions when run',
   actionGroups: [{ id: 'default', name: 'default '}],
   executor,
+  defaultActionGroupId: 'default',
+  producer: 'builtInAlerts'
 };
 
 async function executor({ services, params, state }) {
@@ -16,6 +18,8 @@ async function executor({ services, params, state }) {
     count: state.count,
   };
 
+  console.log('trying to throw an error here')
+  if (state) throw new Error('wops')
   services.alertInstanceFactory('').scheduleActions('default', context);
 
   state.count++;

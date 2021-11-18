@@ -1,4 +1,4 @@
-import { AlertType } from '../../../../../kibana/x-pack/plugins/alerting/server';
+import { AlertType } from '../../../../../kibana/x-pack/plugins/alerts/server';
 
 import { sqlResultToObjects } from './lib/sql'
 
@@ -8,9 +8,11 @@ const actionGroups = ['up', 'down', 'flapping', 'noData'].map(actionGroup => {
 
 export const alertType: AlertType = {
   id: 'example.heartbeat',
-  name: 'Alert for heartbeat/uptime monitoring',
+  name: 'Example alert for heartbeat/uptime monitoring',
   actionGroups,
   executor,
+  defaultActionGroupId: 'default',
+  producer: 'builtInAlerts'
 }
 
 interface ActionContext {

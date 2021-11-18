@@ -1,5 +1,8 @@
-import { schema  } from '../../../../../kibana/packages/kbn-config-schema';
+// run a profile via
+//    curl -kOJ $KBN_URL/_dev/cpu_profile?duration=seconds
+// if no duration parameter is used, the default is 5 seconds
 
+import { schema } from '@kbn/config-schema';
 import { IRouter } from '../../../../../kibana/src/core/server';
 import { Plugin } from '../index';
 import { createSession, Session } from '../lib/session';
@@ -64,7 +67,11 @@ export function registerRoute(plugin: Plugin, router: IRouter): void {
       return response.badRequest({ body: `unable to capture profile` });
     }
 
-    const fileName = new Date().toISOString().replace('T','@').substring(5, 19);
+    const fileName = new Date().toISOString()
+      .replace('T','_')
+      .replace(/\//g,'-')
+      .replace(/:/g,'-')
+      .substring(5, 19);
 
     return response.ok({
       body: profile,
